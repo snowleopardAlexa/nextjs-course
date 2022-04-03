@@ -22,12 +22,15 @@ export default Home
 // the code is now executed on the SERVER-SIDE 
 // cwd - current working directory
 export async function getStaticProps() {
+  console.log('(Re-) Generating...')
   const filePath = path.join(process.cwd(), 'data', 'dummy-backend.json')
   const jsonData = await fs.readFile(filePath)
-  const data = JSON.parse(javascript)
+  const data = JSON.parse(jsonData)
 
   return { 
     props: {
-      products: [{id: 'p1', title: 'Product 1'}]
-  }}
+      products: data.products
+   },
+   revalidate: 10
+  }
 }

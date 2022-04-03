@@ -21,16 +21,22 @@ export default Home
 // pre-fetch data before this component get pre-render by next.js
 // the code is now executed on the SERVER-SIDE 
 // cwd - current working directory
-export async function getStaticProps() {
+export async function getStaticProps(context) {
   console.log('(Re-) Generating...')
   const filePath = path.join(process.cwd(), 'data', 'dummy-backend.json')
   const jsonData = await fs.readFile(filePath)
   const data = JSON.parse(jsonData)
 
+  // if code fails to fetch data - displays 404 page
+  if (data.products.lenght === 0) {
+    return { notFound: true}
+  }
+
   return { 
     props: {
       products: data.products
    },
-   revalidate: 10
+   revalidate: 10,
+   
   }
 }
